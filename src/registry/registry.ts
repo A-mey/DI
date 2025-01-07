@@ -8,3 +8,4 @@ export const ClassRegistry = new Map<string, any>();
 // export const ClassRegistry = new Map<string, new (...args: any[]) => any>();
 
 export const TypeMap = new Map<Function, Function>();
+
