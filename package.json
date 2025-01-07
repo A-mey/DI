@@ -1,0 +1,33 @@
+{
+  "name": "simpledi",
+  "version": "1.0.0",
+  "description": "DI container package",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "node --import tsx --test src/test/index.test.ts",
+    "build": "tsc -p ./",
+    "run": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A-mey/simpledi.git"
+  },
+  "keywords": [
+    "dependency",
+    "injection"
+  ],
+  "author": "ameya",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.7.5",
+    "tsx": "^4.19.1"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.2.2",
+    "typescript": "^5.6.2"
+  },
+  "bugs": {
+    "url": "https://github.com/A-mey/simpledi/issues"
+  },
+  "homepage": "https://github.com/A-mey/simpledi#readme"
+}
