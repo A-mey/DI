@@ -47,6 +47,10 @@ export const getRealInstance = (className: string): any => {
     throw new Error(`Class ${className} not found in registry.`);
   }
 
+  if (!ClassConstructorData.real) {
+    return;
+  }
+
   const ClassConstructor = ClassConstructorData.real;
 
   // Retrieve constructor parameter types
@@ -54,12 +58,14 @@ export const getRealInstance = (className: string): any => {
 
   // Resolve dependencies
   const dependencies = paramTypes.map((paramType) => {
-    if (!paramType) {
+    console.log("paramTypes", paramType);
+      if (!paramType) {
       throw new Error(`Undefined dependency found for class ${className}`);
     }
 
     // Check if paramType corresponds to a token
     const concreteType = TypeMap.get(paramType) || paramType;
+    console.log("concreteType", concreteType);
 
     const dependencyName = concreteType.name;
 
@@ -69,6 +75,8 @@ export const getRealInstance = (className: string): any => {
 
     return getRealInstance(dependencyName);
   });
+
+  console.log("dependencies", dependencies);
 
   // Instantiate the class with resolved dependencies
   return new (ClassConstructor as any)(...dependencies);

@@ -16,16 +16,16 @@ class B implements BInterface {
     }
 }
 
-// @service("mock")
-// class BMock implements BInterface {
-//     constructor () {
-//         console.log("B mock instantiated");
-//     }
+@service("mock")
+class BMock implements BInterface {
+    constructor () {
+        console.log("B mock instantiated");
+    }
 
-//     getxyz = () => {
-//         return "5678";
-//     }
-// }
+    getxyz = () => {
+        return "5678";
+    }
+}
 
 
 
@@ -51,9 +51,10 @@ class A {
     }
 }
 
-console.log("xyz", Reflect.getMetadata("design:paramtypes", A));
+// console.log("xyz", Reflect.getMetadata("design:paramtypes", A));
 
 interface1(BInterfaceToken, B);
+interface1(BInterfaceToken, BMock);
 
 console.log("Registry", ClassRegistry);
 const x = getRealInstance("A");
