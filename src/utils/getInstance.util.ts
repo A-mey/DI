@@ -44,6 +44,7 @@ export const getRealInstance = (className: string): any => {
   const ClassConstructorData = ClassRegistry.get(className);
 
   if (!ClassConstructorData) {
+
     throw new Error(`Class ${className} not found in registry.`);
   }
 
@@ -57,7 +58,7 @@ export const getRealInstance = (className: string): any => {
   const paramTypes: any[] = Reflect.getMetadata("design:paramtypes", ClassConstructor) || [];
 
   // Resolve dependencies
-  const dependencies = paramTypes.map((paramType) => {
+  let dependencies = paramTypes.map((paramType) => {
     console.log("paramTypes", paramType);
       if (!paramType) {
       throw new Error(`Undefined dependency found for class ${className}`);
@@ -67,14 +68,14 @@ export const getRealInstance = (className: string): any => {
     const concreteType = TypeMap.get(paramType) || paramType;
     console.log("concreteType", concreteType);
 
-    const dependencyName = concreteType.name;
+    const dependencyName = concreteType.real.name;
 
     if (!ClassRegistry.has(dependencyName)) {
       throw new Error(`Dependency ${dependencyName} not found for class ${className}`);
     }
 
     return getRealInstance(dependencyName);
-  });
+  }).filter(x => x);
 
   console.log("dependencies", dependencies);
 
@@ -86,13 +87,22 @@ export const getRealInstance = (className: string): any => {
 
 
 export const getMockInstance = (className: string): any => {
+  console.log("classRegistry", ClassRegistry);
   const ClassConstructorData = ClassRegistry.get(className);
 
   if (!ClassConstructorData) {
     throw new Error(`Class ${className} not found in registry.`);
   }
 
-  const ClassConstructor = ClassConstructorData.mock;
+  // if (!ClassConstructorData.mock) {
+  //   return;
+  // }
+
+  const ClassConstructor = ClassConstructorData.mock || ClassConstructorData.real;
+
+  if (!ClassConstructor) {
+    return;
+  }
 
   // Retrieve constructor parameter types
   const paramTypes: any[] = Reflect.getMetadata("design:paramtypes", ClassConstructor) || [];
@@ -106,19 +116,23 @@ export const getMockInstance = (className: string): any => {
 
   // Recursively resolve dependencies
   const dependencies = paramTypes.map((paramType) => {
-    console.log("paramType", paramType);
-    if (!paramType) {
+    console.log("paramTypes", paramType);
+      if (!paramType) {
       throw new Error(`Undefined dependency found for class ${className}`);
     }
 
-    const dependencyName = paramType.name;
-    console.log("dependencyName", dependencyName);
+    // Check if paramType corresponds to a token
+    const concreteType = TypeMap.get(paramType) || paramType;
+    console.log("concreteType", concreteType);
+
+    const dependencyName = concreteType.mock.name || concreteType.real.name;
+
     if (!ClassRegistry.has(dependencyName)) {
       throw new Error(`Dependency ${dependencyName} not found for class ${className}`);
     }
 
     return getMockInstance(dependencyName);
-  });
+  }).filter(x => x);
 
   // Instantiate the class with resolved dependencies
   return new (ClassConstructor as any)(...dependencies);

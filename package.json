@@ -6,7 +6,8 @@
   "scripts": {
     "test": "node --import tsx --test src/test/index.test.ts",
     "build": "tsc -p ./",
-    "run": "node dist/index.js"
+    "run": "node dist/index.js",
+    "watch": "tsx watch ./src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^22.7.5",
-    "tsx": "^4.19.1"
+    "tsx": "^4.19.2"
   },
   "dependencies": {
     "reflect-metadata": "^0.2.2",

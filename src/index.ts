@@ -56,12 +56,12 @@ class A {
 interface1(BInterfaceToken, B);
 interface1(BInterfaceToken, BMock);
 
-console.log("Registry", ClassRegistry);
+// console.log("Registry", ClassRegistry);
 const x = getRealInstance("A");
-// const y = getMockInstance("A");
+const y = getMockInstance("A");
 console.log("x", x, typeof x);
-// console.log("y", y, typeof y);
+console.log("y", y, typeof y);
 console.log("x123", x.b);
-// console.log("y123", y.b);
+console.log("y123", y.b);
 console.log("data", x.xyz());
-// console.log("data2", y.xyz());
+console.log("data2", y.xyz());
