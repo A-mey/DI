@@ -3,7 +3,7 @@ import assert from 'assert';
 import { describe, it, before, beforeEach, mock } from 'node:test';
 import { service } from "../utils/service.util";
 // import { getInstance } from "../utils/getInstance.util";
-import { ClassRegistry } from '../registry/registry';
+import { ClassRegistry } from '../registry/class.registry';
 
 
 describe('Register classes', () => {

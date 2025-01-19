@@ -1,10 +1,14 @@
 import "reflect-metadata";
-import { Inject, interface1, service } from "./utils/service.util";
-import { ClassRegistry } from "./registry/registry";
-import { getMockInstance, getRealInstance } from "./utils/getInstance.util";
+import { service } from "./utils/service.util";
+import { getInstance } from "./utils/getInstance.util";
+import { getMockInstance } from "./utils/getMockInstance.util";
+import { Interface } from "./utils/interface.util";
+import { Inject } from "./utils/inject.util";
 
 
+const BInterfaceToken = Symbol("BInterface");
 
+@Interface(BInterfaceToken)
 @service()
 class B implements BInterface {
     constructor () {
@@ -16,6 +20,7 @@ class B implements BInterface {
     }
 }
 
+@Interface(BInterfaceToken)
 @service("mock")
 class BMock implements BInterface {
     constructor () {
@@ -33,7 +38,6 @@ interface BInterface {
     getxyz(): string
 }
 
-const BInterfaceToken = Symbol("BInterface");
 
 @service()
 class A {
@@ -46,18 +50,11 @@ class A {
     }
 
     xyz = () => {
-        console.log(this);  // Debugging the 'this' context
         return this.b.getxyz();
     }
 }
 
-// console.log("xyz", Reflect.getMetadata("design:paramtypes", A));
-
-interface1(BInterfaceToken, B);
-interface1(BInterfaceToken, BMock);
-
-// console.log("Registry", ClassRegistry);
-const x = getRealInstance("A");
+const x = getInstance("A");
 const y = getMockInstance("A");
 console.log("x", x, typeof x);
 console.log("y", y, typeof y);

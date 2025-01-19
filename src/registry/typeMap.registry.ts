@@ -1,0 +1,1 @@
+export const TypeMap = new Map<Function, any>();
