@@ -5,6 +5,8 @@ import { getMockInstance } from "./utils/getMockInstance.util";
 import { Interface } from "./utils/interface.util";
 import { Inject } from "./utils/inject.util";
 
+export { service, getInstance, getMockInstance, Interface, Inject }
+
 
 const BInterfaceToken = Symbol("BInterface");
 
@@ -54,11 +56,23 @@ class A {
     }
 }
 
-const x = getInstance("A");
-const y = getMockInstance("A");
-console.log("x", x, typeof x);
-console.log("y", y, typeof y);
-console.log("x123", x.b);
-console.log("y123", y.b);
-console.log("data", x.xyz());
-console.log("data2", y.xyz());
+class C {
+    constructor (@Inject(BInterfaceToken) public A: BInterface) {
+        console.log("C instantiated");
+    }
+
+    getXYZ = () => {
+        
+    }
+}
+
+// const x = getInstance("A");
+// const y = getMockInstance("A");
+// console.log("x", x, typeof x);
+// console.log("y", y, typeof y);
+// console.log("x123", x.b);
+// console.log("y123", y.b);
+// console.log("data", x.xyz());
+// console.log("data2", y.xyz());
+
+const z = getInstance("C")

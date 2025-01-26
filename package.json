@@ -30,5 +30,6 @@
   "bugs": {
     "url": "https://github.com/A-mey/simpledi/issues"
   },
-  "homepage": "https://github.com/A-mey/simpledi#readme"
+  "homepage": "https://github.com/A-mey/simpledi#readme",
+  "type": "module"
 }
