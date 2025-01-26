@@ -1,22 +1,22 @@
 import { ClassRegistry } from "../registry/class.registry";
 import { TypeMap } from "../registry/typeMap.registry";
 
-export const service = (type?: "mock") => {
+export const service = (classType?: "mock") => {
 	return function (target: Function): void {
 		const className = target.name;
-		const classType = type? "mock":"real";
+		const type: "real" | "mock" = classType? "mock":"real";
 	
 		if (ClassRegistry.has(className)) {
 		const classData = ClassRegistry.get(className);
-		if (classData && classData[classType]) {
+		if (classData && classData.type) {
 			throw new Error();
-		} else if (classData && !classData[classType]) {
-			classData[classType] = target
+		} else if (classData && !classData.type) {
+			classData.type = type
 		}
 		} else {
-			const insertData = classType === "real" ? {real: target, mock: null} : {real: null, mock: target}
+			const insertData = {class: target, type: type};
 			ClassRegistry.set(className, insertData);
 		}
-		// console.log("ClassRegistry", ClassRegistry);
+		console.log("ClassRegistry", ClassRegistry);
 	}
 };

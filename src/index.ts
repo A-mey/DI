@@ -3,7 +3,7 @@ import { service } from "./utils/service.util";
 import { getInstance } from "./utils/getInstance.util";
 import { getMockInstance } from "./utils/getMockInstance.util";
 import { Interface } from "./utils/interface.util";
-import { Inject } from "./utils/inject.util";
+import { Inject, InjectClass } from "./utils/inject.util";
 
 export { service, getInstance, getMockInstance, Interface, Inject }
 
@@ -12,7 +12,7 @@ const BInterfaceToken = Symbol("BInterface");
 
 @Interface(BInterfaceToken)
 @service()
-class B implements BInterface {
+class B {
     constructor () {
         console.log("B instantiated");
     }
@@ -56,17 +56,18 @@ class A {
     }
 }
 
-class C {
-    constructor (@Inject(BInterfaceToken) public A: BInterface) {
-        console.log("C instantiated");
-    }
+// @service()
+// class C {
+//     constructor (@InjectClass() public b: B) {
+//         console.log("C instantiated");
+//     }
 
-    getXYZ = () => {
-        
-    }
-}
+//     getXYZ = () => {
+//         return this.b.getxyz();
+//     }
+// }
 
-// const x = getInstance("A");
+const x = getInstance("A");
 // const y = getMockInstance("A");
 // console.log("x", x, typeof x);
 // console.log("y", y, typeof y);
@@ -75,4 +76,6 @@ class C {
 // console.log("data", x.xyz());
 // console.log("data2", y.xyz());
 
-const z = getInstance("C")
+// const z = getInstance("C");
+// console.log("z", z, typeof z);
+// console.log("data", z.getXYZ());
