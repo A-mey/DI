@@ -1,5 +1,5 @@
 {
-  "name": "simpledi",
+  "name": "di",
   "version": "1.0.0",
   "description": "DI container package",
   "main": "dist/index.js",
