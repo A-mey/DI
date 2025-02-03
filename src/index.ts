@@ -22,52 +22,68 @@ class B {
     }
 }
 
-@Interface(BInterfaceToken)
-@service("mock")
-class BMock implements BInterface {
-    constructor () {
-        console.log("B mock instantiated");
-    }
-
-    getxyz = () => {
-        return "5678";
-    }
-}
-
-
-
-interface BInterface {
-    getxyz(): string
-}
-
-
-@service()
-class A {
-
-    // b: B;
-
-    constructor(@Inject(BInterfaceToken) public b: BInterface) {
-        // this.b = b;
-        console.log("A instantiated with B");
-    }
-
-    xyz = () => {
-        return this.b.getxyz();
-    }
-}
-
-// @service()
-// class C {
-//     constructor (@InjectClass() public b: B) {
-//         console.log("C instantiated");
+// @Interface(BInterfaceToken)
+// @service("mock")
+// class BMock implements BInterface {
+//     constructor () {
+//         console.log("B mock instantiated");
 //     }
 
-//     getXYZ = () => {
+//     getxyz = () => {
+//         return "5678";
+//     }
+// }
+
+
+
+// interface BInterface {
+//     getxyz(): string
+// }
+
+
+// @service()
+// class A {
+
+//     // b: B;
+
+//     constructor(@Inject(BInterfaceToken) public b: BInterface) {
+//         // this.b = b;
+//         console.log("A instantiated with B");
+//     }
+
+//     xyz = () => {
 //         return this.b.getxyz();
 //     }
 // }
 
-const x = getInstance("A");
+@service()
+class D {
+    constructor () {
+
+    }
+
+    getPqr = () => {
+        return "PQR";
+    }
+}
+
+@InjectClass([B, D])
+@service()
+class C {
+    constructor (public b: B, public d: D) {
+        console.log("C instantiated");
+    }
+
+    getXYZ = () => {
+        return this.b.getxyz();
+    }
+
+    getPQR = () => {
+        return this.d.getPqr();
+    }
+}
+
+// const x = getInstance("A");
 // const y = getMockInstance("A");
 // console.log("x", x, typeof x);
 // console.log("y", y, typeof y);

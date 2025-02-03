@@ -1,3 +1,5 @@
+import { classParams, ClassRegistry } from "../registry/class.registry";
+
 type Token = string | Symbol;
 
 export const Inject = (token: Token): ParameterDecorator => {
@@ -10,11 +12,19 @@ export const Inject = (token: Token): ParameterDecorator => {
 	};
 };
 
-export const InjectClass = (): ParameterDecorator => {
-	return (target, propertyKey, parameterIndex) => {
-		const existingTokens = Reflect.getMetadata("design:paramtypes", target) || [];
-		  console.log("existingTokens", existingTokens);
-	  	existingTokens[parameterIndex] = target;
-	  	Reflect.defineMetadata("design:paramtypes", existingTokens, target);
+export const InjectClass = (innerClass: Function []) => {
+	return function (outerClass: Function): void  {
+		console.log("target", outerClass);
+		console.log("className", innerClass);
+		console.log("classRegistry", ClassRegistry);
+		const classRegister: classParams | undefined = ClassRegistry.get(outerClass.name);
+		if (!classRegister) {
+			throw new Error("class not found");
+		}
+		innerClass.forEach((x: Function) => {
+			classRegister.constructor?.push(x);
+		});
+		ClassRegistry.set(outerClass.name, classRegister);
+		console.log("classRegistry", ClassRegistry);
 	};
 };
