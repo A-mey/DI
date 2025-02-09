@@ -65,6 +65,7 @@ export const getMockInstance2 = (actualClass: Function) : any=> {
             // if (!constructor) {
             //     throw new Error(`Undefined dependency found for class ${className}`);
             // }
+            console.log("constructor", constructor);
             let dependency: Function | null = null;
             if (typeof constructor === "string") {
                 const mockClassData = TypeMap.get(constructor);
