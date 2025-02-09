@@ -1,11 +1,11 @@
 import "reflect-metadata";
 import { service } from "./utils/service.util";
 import { getInstance } from "./utils/getInstance.util";
-import { getMockInstance } from "./utils/getMockInstance.util";
+import { getMockInstance2 } from "./utils/getMockInstance.util";
 import { Interface } from "./utils/interface.util";
 import { Inject } from "./utils/inject.util";
 
-export { service, getInstance, getMockInstance, Interface, Inject }
+// export { service, getInstance, getMockInstance, Interface, Inject }
 
 
 const BInterfaceToken = Symbol("BInterface");
@@ -98,14 +98,14 @@ class E {
 }
 
 // const x = getInstance("A");
-// const y = getMockInstance("A");
+const y = getMockInstance2(C);
 // console.log("x", x, typeof x);
-// console.log("y", y, typeof y);
+console.log("y", y, typeof y);
 // console.log("x123", x.b);
-// console.log("y123", y.b);
+console.log("y123", y.b);
 // console.log("data", x.xyz());
-// console.log("data2", y.xyz());
+console.log("data2", y.xyz());
 
-// const z = getInstance("C");
-// console.log("z", z, typeof z);
-// console.log("data", z.getXYZ());
+const z = getInstance("C");
+console.log("z", z, typeof z);
+console.log("data", z.getXYZ());
