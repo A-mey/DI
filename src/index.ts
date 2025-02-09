@@ -56,6 +56,7 @@ class A {
     }
 }
 
+@service()
 class C {
     constructor (@Inject(BInterfaceToken) public A: BInterface) {
         console.log("C instantiated");
@@ -66,13 +67,13 @@ class C {
     }
 }
 
-// const x = getInstance("A");
-// const y = getMockInstance("A");
-// console.log("x", x, typeof x);
-// console.log("y", y, typeof y);
-// console.log("x123", x.b);
-// console.log("y123", y.b);
-// console.log("data", x.xyz());
-// console.log("data2", y.xyz());
+const x = getInstance("A");
+const y = getMockInstance("A");
+console.log("x", x, typeof x);
+console.log("y", y, typeof y);
+console.log("x123", x.b);
+console.log("y123", y.b);
+console.log("data", x.xyz());
+console.log("data2", y.xyz());
 
 const z = getInstance("C")

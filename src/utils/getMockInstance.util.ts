@@ -36,6 +36,8 @@ export const getMockInstance = (className: string): any => {
   
       return getMockInstance(dependencyName);
     }).filter(x => x);
+
+    console.log("dependencies", dependencies);
   
     return new (ClassConstructor as any)(...dependencies);
 }
