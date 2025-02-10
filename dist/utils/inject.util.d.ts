@@ -1,3 +1,1 @@
-type Token = string | Symbol;
-export declare const Inject: (token: Token) => ParameterDecorator;
-export {};
+export declare const Inject: (injectedClassOrInterface: Array<Function | string>) => (outerClass: Function) => void;

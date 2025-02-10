@@ -3,22 +3,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Interface = void 0;
 const class_registry_1 = require("../registry/class.registry");
 const typeMap_registry_1 = require("../registry/typeMap.registry");
-const Interface = (abstractType) => {
-    return function (concreteType) {
-        if (!abstractType || !concreteType) {
+const Interface = (interfaceName) => {
+    return function (actualClass) {
+        if (!interfaceName || !actualClass) {
             throw new Error("Both abstractType and concreteType must be provided.");
         }
         // console.log("concreteType.name", concreteType.name);
-        const className = class_registry_1.ClassRegistry.get(concreteType.name);
+        const className = class_registry_1.ClassRegistry.get(actualClass.name);
         // console.log("className", className);
-        if (className === "") {
+        if (!className) {
             throw new Error("No class found");
         }
-        const realClassName = className.real ? className.real : null;
-        const mockClassName = className.mock ? className.mock : null;
-        const TypeData = typeMap_registry_1.TypeMap.get(abstractType);
+        const realClassName = className.type === "real" ? className.class.name : null;
+        const mockClassName = className.type === "mock" ? className.class.name : null;
+        const updatedClassName = { real: realClassName, mock: mockClassName };
+        const TypeData = typeMap_registry_1.TypeMap.get(interfaceName);
         if (!TypeData) {
-            typeMap_registry_1.TypeMap.set(abstractType, className);
+            typeMap_registry_1.TypeMap.set(interfaceName, updatedClassName);
         }
         else {
             if (realClassName) {
@@ -28,8 +29,8 @@ const Interface = (abstractType) => {
                 TypeData.mock = mockClassName;
             }
         }
-        // console.log("TypeMap", TypeMap);
+        console.log("TypeMap", typeMap_registry_1.TypeMap);
     };
 };
 exports.Interface = Interface;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW50ZXJmYWNlLnV0aWwuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvdXRpbHMvaW50ZXJmYWNlLnV0aWwudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQUEsK0RBQTJEO0FBQzNELG1FQUF1RDtBQUVoRCxNQUFNLFNBQVMsR0FBRyxDQUFDLFlBQWlCLEVBQUUsRUFBRTtJQUM5QyxPQUFPLFVBQVUsWUFBc0I7UUFDdEMsSUFBSSxDQUFDLFlBQVksSUFBSSxDQUFDLFlBQVksRUFBRSxDQUFDO1lBQ3BDLE1BQU0sSUFBSSxLQUFLLENBQUMsc0RBQXNELENBQUMsQ0FBQztRQUN2RSxDQUFDO1FBQ0QsdURBQXVEO1FBQ3ZELE1BQU0sU0FBUyxHQUFHLDhCQUFhLENBQUMsR0FBRyxDQUFDLFlBQVksQ0FBQyxJQUFJLENBQUMsQ0FBQztRQUN2RCx1Q0FBdUM7UUFDdkMsSUFBSSxTQUFTLEtBQUssRUFBRSxFQUFFLENBQUM7WUFDdEIsTUFBTSxJQUFJLEtBQUssQ0FBQyxnQkFBZ0IsQ0FBQyxDQUFBO1FBQ2xDLENBQUM7UUFDRCxNQUFNLGFBQWEsR0FBRyxTQUFTLENBQUMsSUFBSSxDQUFDLENBQUMsQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUM7UUFDN0QsTUFBTSxhQUFhLEdBQUcsU0FBUyxDQUFDLElBQUksQ0FBQyxDQUFDLENBQUMsU0FBUyxDQUFDLElBQUksQ0FBQyxDQUFDLENBQUMsSUFBSSxDQUFDO1FBQzdELE1BQU0sUUFBUSxHQUFHLDBCQUFPLENBQUMsR0FBRyxDQUFDLFlBQVksQ0FBQyxDQUFDO1FBQzNDLElBQUksQ0FBQyxRQUFRLEVBQUUsQ0FBQztZQUNmLDBCQUFPLENBQUMsR0FBRyxDQUFDLFlBQVksRUFBRSxTQUFTLENBQUMsQ0FBQztRQUN0QyxDQUFDO2FBQU0sQ0FBQztZQUNQLElBQUksYUFBYSxFQUFFLENBQUM7Z0JBQ25CLFFBQVEsQ0FBQyxJQUFJLEdBQUcsYUFBYSxDQUFBO1lBQzlCLENBQUM7WUFDRCxJQUFJLGFBQWEsRUFBRSxDQUFDO2dCQUNuQixRQUFRLENBQUMsSUFBSSxHQUFHLGFBQWEsQ0FBQTtZQUM5QixDQUFDO1FBQ0YsQ0FBQztRQUNELG1DQUFtQztJQUN0QyxDQUFDLENBQUE7QUFDRixDQUFDLENBQUM7QUExQlcsUUFBQSxTQUFTLGFBMEJwQiJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW50ZXJmYWNlLnV0aWwuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi9zcmMvdXRpbHMvaW50ZXJmYWNlLnV0aWwudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQUEsK0RBQTJEO0FBQzNELG1FQUEwRTtBQUVuRSxNQUFNLFNBQVMsR0FBRyxDQUFDLGFBQWtCLEVBQUUsRUFBRTtJQUMvQyxPQUFPLFVBQVUsV0FBcUI7UUFDckMsSUFBSSxDQUFDLGFBQWEsSUFBSSxDQUFDLFdBQVcsRUFBRSxDQUFDO1lBQ3BDLE1BQU0sSUFBSSxLQUFLLENBQUMsc0RBQXNELENBQUMsQ0FBQztRQUN2RSxDQUFDO1FBQ0QsdURBQXVEO1FBQ3ZELE1BQU0sU0FBUyxHQUFHLDhCQUFhLENBQUMsR0FBRyxDQUFDLFdBQVcsQ0FBQyxJQUFJLENBQUMsQ0FBQztRQUN0RCx1Q0FBdUM7UUFDdkMsSUFBSSxDQUFDLFNBQVMsRUFBRSxDQUFDO1lBQ2hCLE1BQU0sSUFBSSxLQUFLLENBQUMsZ0JBQWdCLENBQUMsQ0FBQTtRQUNsQyxDQUFDO1FBQ0QsTUFBTSxhQUFhLEdBQUcsU0FBUyxDQUFDLElBQUksS0FBSyxNQUFNLENBQUMsQ0FBQyxDQUFDLFNBQVMsQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUM7UUFDOUUsTUFBTSxhQUFhLEdBQUcsU0FBUyxDQUFDLElBQUksS0FBSyxNQUFNLENBQUMsQ0FBQyxDQUFDLFNBQVMsQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUM7UUFFOUUsTUFBTSxnQkFBZ0IsR0FBc0IsRUFBRSxJQUFJLEVBQUUsYUFBYSxFQUFFLElBQUksRUFBRSxhQUFhLEVBQUUsQ0FBQTtRQUN4RixNQUFNLFFBQVEsR0FBRywwQkFBTyxDQUFDLEdBQUcsQ0FBQyxhQUFhLENBQUMsQ0FBQztRQUM1QyxJQUFJLENBQUMsUUFBUSxFQUFFLENBQUM7WUFDZiwwQkFBTyxDQUFDLEdBQUcsQ0FBQyxhQUFhLEVBQUUsZ0JBQWdCLENBQUMsQ0FBQztRQUM5QyxDQUFDO2FBQU0sQ0FBQztZQUNQLElBQUksYUFBYSxFQUFFLENBQUM7Z0JBQ25CLFFBQVEsQ0FBQyxJQUFJLEdBQUcsYUFBYSxDQUFBO1lBQzlCLENBQUM7WUFDRCxJQUFJLGFBQWEsRUFBRSxDQUFDO2dCQUNuQixRQUFRLENBQUMsSUFBSSxHQUFHLGFBQWEsQ0FBQTtZQUM5QixDQUFDO1FBQ0YsQ0FBQztRQUNELE9BQU8sQ0FBQyxHQUFHLENBQUMsU0FBUyxFQUFFLDBCQUFPLENBQUMsQ0FBQztJQUNuQyxDQUFDLENBQUE7QUFDRixDQUFDLENBQUM7QUE1QlcsUUFBQSxTQUFTLGFBNEJwQiJ9

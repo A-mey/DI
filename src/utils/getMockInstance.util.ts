@@ -92,7 +92,7 @@ import { TypeMap } from "../registry/typeMap.registry";
 //     return new (ClassConstructor as any)(...dependencies);
 // }
 
-export const getMockInstance2 = (actualClass: Function): any => {
+export const getMockInstance = (actualClass: Function): any => {
     const className = actualClass.name;
     const ClassConstructorData = ClassRegistry.get(className);
 
@@ -127,7 +127,7 @@ export const getMockInstance2 = (actualClass: Function): any => {
             dependency = constructor;
         }
 
-        return getMockInstance2(dependency as Function);
+        return getMockInstance(dependency as Function);
     }).filter(Boolean); // Fix: Better filtering
 
     console.log("dependencies", dependencies);

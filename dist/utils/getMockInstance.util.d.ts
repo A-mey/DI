@@ -1,1 +1,1 @@
-export declare const getMockInstance: (className: string) => any;
+export declare const getMockInstance2: (actualClass: Function) => any;

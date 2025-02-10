@@ -1,1 +1,1 @@
-export declare const Interface: (abstractType: any) => (concreteType: Function) => void;
+export declare const Interface: (interfaceName: any) => (actualClass: Function) => void;
