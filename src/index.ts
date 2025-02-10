@@ -104,8 +104,8 @@ console.log("y", y, typeof y);
 // console.log("x123", x.b);
 console.log("y123", y.b);
 // console.log("data", x.xyz());
-console.log("data2", y.xyz());
+console.log("data2", y.getXYZ());
 
-const z = getInstance("C");
-console.log("z", z, typeof z);
-console.log("data", z.getXYZ());
+// const z = getInstance("C");
+// console.log("z", z, typeof z);
+// console.log("data", z.getXYZ());

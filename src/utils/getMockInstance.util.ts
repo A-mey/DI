@@ -45,49 +45,91 @@ import { TypeMap } from "../registry/typeMap.registry";
 //     return new (ClassConstructor as any)(...dependencies);
 // }
 
-export const getMockInstance2 = (actualClass: Function) : any=> {
-    const className = actualClass.name;
+// export const getMockInstance2 = (actualClass: Function) : any=> {
+//     const className = actualClass.name;
 
-    const ClassConstructorData = ClassRegistry.get(className);
+//     const ClassConstructorData = ClassRegistry.get(className);
   
+//     if (!ClassConstructorData) {
+//       throw new Error(`Class ${className} not found in registry.`);
+//     }
+
+//     const ClassConstructor = ClassConstructorData.constructor;
+
+//     if (!ClassConstructor) {
+//         throw new Error(`Undefined dependency found for class ${className}`);
+//     }
+
+//     // if (ClassConstructor && ClassConstructor.length) {
+//         const dependencies = ClassConstructor.map((constructor: string | Function) => {
+//             // if (!constructor) {
+//             //     throw new Error(`Undefined dependency found for class ${className}`);
+//             // }
+//             console.log("constructor", constructor);
+//             let dependency: Function | null = null;
+//             if (typeof constructor === "string") {
+//                 const mockClassData = TypeMap.get(constructor);
+//                 if (!mockClassData) {
+//                     return;
+//                 }
+//                 const dependencyName = mockClassData.mock || mockClassData.real;
+//                 if (!dependencyName) {
+//                     return;
+//                 }
+//                 const dependencyData = ClassRegistry.get(dependencyName)
+//                 if (!dependencyData) {
+//                     return;
+//                 }
+//                 dependency = dependencyData.class;
+//             } else {
+//                 dependency = constructor
+//             }
+//             return getMockInstance2(dependency as Function);
+//         }).filter(x => x);
+
+//     // }
+//     console.log("dependencies", dependencies);
+//     return new (ClassConstructor as any)(...dependencies);
+// }
+
+export const getMockInstance2 = (actualClass: Function): any => {
+    const className = actualClass.name;
+    const ClassConstructorData = ClassRegistry.get(className);
+
     if (!ClassConstructorData) {
-      throw new Error(`Class ${className} not found in registry.`);
+        throw new Error(`Class ${className} not found in registry.`);
     }
 
-    const ClassConstructor = ClassConstructorData.constructor;
+    const ClassConstructor = ClassConstructorData.class; // Fix: Use .class instead of .constructor
 
     if (!ClassConstructor) {
         throw new Error(`Undefined dependency found for class ${className}`);
     }
 
-    // if (ClassConstructor && ClassConstructor.length) {
-        const dependencies = ClassConstructor.map((constructor: string | Function) => {
-            // if (!constructor) {
-            //     throw new Error(`Undefined dependency found for class ${className}`);
-            // }
-            console.log("constructor", constructor);
-            let dependency: Function | null = null;
-            if (typeof constructor === "string") {
-                const mockClassData = TypeMap.get(constructor);
-                if (!mockClassData) {
-                    return;
-                }
-                const dependencyName = mockClassData.mock || mockClassData.real;
-                if (!dependencyName) {
-                    return;
-                }
-                const dependencyData = ClassRegistry.get(dependencyName)
-                if (!dependencyData) {
-                    return;
-                }
-                dependency = dependencyData.class;
-            } else {
-                dependency = constructor
-            }
-            return getMockInstance2(dependency as Function);
-        }).filter(x => x);
+    const constructorParams = ClassConstructorData.constructor || []; // Ensure it's an array
 
-    // }
+    const dependencies = constructorParams.map((constructor: string | Function) => {
+        console.log("constructor", constructor);
+        let dependency: Function | null = null;
+
+        if (typeof constructor === "string") {
+            const mockClassData = TypeMap.get(constructor);
+            if (!mockClassData) return;
+
+            const dependencyName = mockClassData.mock || mockClassData.real;
+            if (!dependencyName) return;
+
+            const dependencyData = ClassRegistry.get(dependencyName);
+            if (!dependencyData) return;
+
+            dependency = dependencyData.class;
+        } else {
+            dependency = constructor;
+        }
+
+        return getMockInstance2(dependency as Function);
+    }).filter(Boolean); // Fix: Better filtering
+
     console.log("dependencies", dependencies);
     return new (ClassConstructor as any)(...dependencies);
-}
+};
