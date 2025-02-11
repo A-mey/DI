@@ -29,7 +29,7 @@ type Token = string | Symbol;
 // 	};
 // };
 
-export const Inject = (injectedClassOrInterface: Array<Function | string>) => {
+export const Inject = (injectedClassOrInterface: Array<Function | symbol>) => {
 	return function (outerClass: Function): void  {
 		console.log("target", outerClass);
 		console.log("className", injectedClassOrInterface);
@@ -38,7 +38,7 @@ export const Inject = (injectedClassOrInterface: Array<Function | string>) => {
 		if (!classRegister) {
 			throw new Error("class not found");
 		}
-		injectedClassOrInterface.forEach((x: Function | string) => {
+		injectedClassOrInterface.forEach((x: Function | symbol) => {
 			classRegister.constructor?.push(x);
 		});
 		ClassRegistry.set(outerClass.name, classRegister);

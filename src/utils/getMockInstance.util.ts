@@ -100,19 +100,19 @@ export const getMockInstance = (actualClass: Function): any => {
         throw new Error(`Class ${className} not found in registry.`);
     }
 
-    const ClassConstructor = ClassConstructorData.class; // Fix: Use .class instead of .constructor
+    const ClassConstructor = ClassConstructorData.class;
 
     if (!ClassConstructor) {
         throw new Error(`Undefined dependency found for class ${className}`);
     }
 
-    const constructorParams = ClassConstructorData.constructor || []; // Ensure it's an array
+    const constructorParams = ClassConstructorData.constructor || [];
 
-    const dependencies = constructorParams.map((constructor: string | Function) => {
+    const dependencies = constructorParams.map((constructor: symbol | Function) => {
         console.log("constructor", constructor);
         let dependency: Function | null = null;
 
-        if (typeof constructor === "string") {
+        if (typeof constructor === "symbol") {
             const mockClassData = TypeMap.get(constructor);
             if (!mockClassData) return;
 

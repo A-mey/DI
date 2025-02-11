@@ -84,7 +84,7 @@ describe('Register classes', () => {
         }
     }
 
-    @Inject(["BInterfaceToken", D])
+    @Inject([BInterfaceToken, D])
     @service()
     class E {
         constructor (public b: BInterface, public d: D) {
@@ -101,12 +101,12 @@ describe('Register classes', () => {
     }
     // });
 
-    it ('should add and retrive class', () => {
+    it ('should add and retrive mock classes', () => {
         // const x = getInstance("A");
-        const y = getMockInstance(C);
+        const y = getMockInstance(E);
         const data2 = y.getXYZ();
         console.log("data2", data2);
-        assert.strictEqual(data2, "1234")
+        assert.strictEqual(data2, "5678")
         // console.log("x", x, typeof x);
         // console.log("y", y, typeof y);
         // console.log("x123", x.b);
@@ -117,5 +117,9 @@ describe('Register classes', () => {
         // const z = getInstance("C");
         // console.log("z", z, typeof z);
         // console.log("data", z.getXYZ());
+    })
+
+    it ('should add and retrieve real classes', () => {
+
     })
 })
