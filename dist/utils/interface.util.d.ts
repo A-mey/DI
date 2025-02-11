@@ -1,1 +1,1 @@
-export declare const Interface: (interfaceName: any) => (actualClass: Function) => void;
+export declare const Interface: (interfaceName: symbol) => (actualClass: Function) => void;

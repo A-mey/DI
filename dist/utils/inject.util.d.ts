@@ -1,1 +1,1 @@
-export declare const Inject: (injectedClassOrInterface: Array<Function | string>) => (outerClass: Function) => void;
+export declare const Inject: (injectedClassOrInterface: Array<Function | symbol>) => (outerClass: Function) => void;
