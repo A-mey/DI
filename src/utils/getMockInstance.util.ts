@@ -1,7 +1,7 @@
 import { ClassRegistry } from "../registry/class.registry";
 import { TypeMap } from "../registry/typeMap.registry";
 
-export const getMockInstance = (actualClass: Function): any => {
+export const getMockInstance = <T extends new (...args: any[]) => any> (actualClass: T): InstanceType<T> => {
     const className = actualClass.name;
     const ClassConstructorData = ClassRegistry.get(className);
 
@@ -36,9 +36,9 @@ export const getMockInstance = (actualClass: Function): any => {
             dependency = constructor;
         }
 
-        return getMockInstance(dependency as Function);
+        return getMockInstance(dependency as any);
     }).filter(Boolean);
 
     console.log("dependencies", dependencies);
-    return new (ClassConstructor as any)(...dependencies);
+    return new (ClassConstructor as InstanceType<T>)(...dependencies);
 };

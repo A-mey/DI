@@ -1,7 +1,7 @@
 import { ClassRegistry } from "../registry/class.registry";
 import { TypeMap } from "../registry/typeMap.registry";
 
-export const getInstance = (actualClass: Function): any => {
+export const getInstance = <T extends new (...args: any[]) => any> (actualClass: T): InstanceType<T> => {
 	const className = actualClass.name;
     const ClassConstructorData = ClassRegistry.get(className);
 
@@ -37,10 +37,9 @@ export const getInstance = (actualClass: Function): any => {
             dependency = constructor;
         }
 
-        return getInstance(dependency as Function);
+        return getInstance(dependency as any);
     }).filter(Boolean);
 
     console.log("dependencies", dependencies);
-    return new (ClassConstructor as any)(...dependencies);
+    return new (ClassConstructor as InstanceType<T>)(...dependencies);
 }
-  
