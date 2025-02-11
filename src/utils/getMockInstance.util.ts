@@ -37,7 +37,7 @@ export const getMockInstance = (actualClass: Function): any => {
         }
 
         return getMockInstance(dependency as Function);
-    }).filter(Boolean); // Fix: Better filtering
+    }).filter(Boolean);
 
     console.log("dependencies", dependencies);
     return new (ClassConstructor as any)(...dependencies);
