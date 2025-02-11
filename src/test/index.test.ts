@@ -1,117 +1,98 @@
-import "reflect-metadata";
 import assert from 'assert';
 import { describe, it, before, beforeEach, mock } from 'node:test';
 import { service } from "../utils/service.util";
-import { getInstance } from "../utils/getInstance.util";
 import { ClassRegistry } from '../registry/class.registry';
-import { Interface } from "../utils/interface.util";
 import { Inject } from "../utils/inject.util";
 import { getMockInstance } from "../utils/getMockInstance.util";
+import { Interface } from "../utils/interface.util";
+import { getInstance } from "../utils/getInstance.util";
 
 
 describe('Register classes', () => {
-    it ('should add and retrive class', () => {
+    const BInterfaceToken = Symbol("BInterface");
 
-        const BInterfaceToken = Symbol("BInterface");
-
-        @Interface(BInterfaceToken)
-        @service()
-        class B implements BInterface {
-            constructor () {
-                console.log("B instantiated");
-            }
-
-            getxyz = () => {
-                return "1234";
-            }
+    @Interface(BInterfaceToken)
+    @service()
+    class B implements BInterface {
+        constructor () {
+            console.log("B instantiated");
         }
 
-        @Interface(BInterfaceToken)
-        @service("mock")
-        class BMock implements BInterface {
-            constructor () {
-                console.log("B mock instantiated");
-            }
+        getxyz = () => {
+            return "1234";
+        }
+    }
 
-            getxyz = () => {
-                return "5678";
-            }
+    @Interface(BInterfaceToken)
+    @service("mock")
+    class BMock implements BInterface {
+        constructor () {
+            console.log("B mock instantiated");
         }
 
-        interface BInterface {
-            getxyz(): string
+        getxyz = () => {
+            return "5678";
+        }
+    }
+
+    interface BInterface {
+        getxyz(): string
+    }
+
+    @service()
+    class D {
+        constructor () {
+
         }
 
+        getPqr = () => {
+            return "PQR";
+        }
+    }
 
-        // @service()
-        // class A {
-
-        //     // b: B;
-
-        //     constructor(@Inject(BInterfaceToken) public b: BInterface) {
-        //         // this.b = b;
-        //         console.log("A instantiated with B");
-        //     }
-
-        //     xyz = () => {
-        //         return this.b.getxyz();
-        //     }
-        // }
-
-        @service()
-        class D {
-            constructor () {
-
-            }
-
-            getPqr = () => {
-                return "PQR";
-            }
+    @Inject([B, D])
+    @service()
+    class C {
+        constructor (public b: B, public d: D) {
+            console.log("C instantiated");
         }
 
-        @Inject([B, D])
-        @service()
-        class C {
-            constructor (public b: B, public d: D) {
-                console.log("C instantiated");
-            }
-
-            getXYZ = () => {
-                return this.b.getxyz();
-            }
-
-            getPQR = () => {
-                return this.d.getPqr();
-            }
+        getXYZ = () => {
+            return this.b.getxyz();
         }
 
-        @Inject(["BInterfaceToken", D])
-        @service()
-        class E {
-            constructor (public b: BInterface, public d: D) {
-                console.log("C instantiated");
-            }
+        getPQR = () => {
+            return this.d.getPqr();
+        }
+    }
 
-            getXYZ = () => {
-                return this.b.getxyz();
-            }
-
-            getPQR = () => {
-                return this.d.getPqr();
-            }
+    @Inject([BInterfaceToken, D])
+    @service()
+    class E {
+        constructor (public b: BInterface, public d: D) {
+            console.log("C instantiated");
         }
 
-        // const x = getInstance("A");
-        const y = getMockInstance(C);
-        // console.log("x", x, typeof x);
-        console.log("y", y, typeof y);
-        // console.log("x123", x.b);
-        console.log("y123", y.b);
-        // console.log("data", x.xyz());
-        console.log("data2", y.getXYZ());
+        getXYZ = () => {
+            return this.b.getxyz();
+        }
 
-        // const z = getInstance("C");
-        // console.log("z", z, typeof z);
-        // console.log("data", z.getXYZ());
-    });
-});
+        getPQR = () => {
+            return this.d.getPqr();
+        }
+    }
+
+    it ('should add and retrive mock classes', () => {
+        const y = getMockInstance(E);
+        const data2 = y.getXYZ();
+        console.log("data2", data2);
+        assert.strictEqual(data2, "5678")
+    })
+
+    it ('should add and retrieve real classes', () => {
+        const y = getInstance(E);
+        const data2 = y.getXYZ();
+        console.log("data2", data2);
+        assert.strictEqual(data2, "1234")
+    })
+})

@@ -1,46 +1,46 @@
 import { ClassRegistry } from "../registry/class.registry";
 import { TypeMap } from "../registry/typeMap.registry";
 
-export const getInstance = (className: string): any => {
-  return "";
-  // const ClassConstructorData = ClassRegistry.get(className);
-  // console.log("ClassConstructorData", ClassConstructorData);
-  // if (!ClassConstructorData) {
+export const getInstance = (actualClass: Function): any => {
+	const className = actualClass.name;
+    const ClassConstructorData = ClassRegistry.get(className);
 
-  //   throw new Error(`Class ${className} not found in registry.`);
-  // }
+    if (!ClassConstructorData) {
+        throw new Error(`Class ${className} not found in registry.`);
+    }
 
-  // const ClassConstructor = ClassConstructorData.real;
+    const ClassConstructor = ClassConstructorData.class;
 
-  // console.log("ClassConstructor", ClassConstructor);
-  // if (!ClassConstructor) {
-  //   return;
-  // }
+    if (!ClassConstructor) {
+        throw new Error(`Undefined dependency found for class ${className}`);
+    }
 
-  // const paramTypes: any[] = Reflect.getMetadata("design:paramtypes", ClassConstructor) || [];
+    const constructorParams = ClassConstructorData.constructor || [];
 
-  // console.log("paramTypes", paramTypes);
+    const dependencies = constructorParams.map((constructor: symbol | Function) => {
+        console.log("constructor", constructor);
+        let dependency: Function | null = null;
 
-  // let dependencies = paramTypes.map((paramType) => {
-  //   console.log("paramType", paramType);
-  //     if (!paramType) {
-  //     throw new Error(`Undefined dependency found for class ${className}`);
-  //   }
+        if (typeof constructor === "symbol") {
+            const mockClassData = TypeMap.get(constructor);
+			console.log("MockClassData", mockClassData);
+            if (!mockClassData) return;
 
-  //   const concreteType = TypeMap.get(paramType) || paramType;
-  //   console.log("concreteType", concreteType);
+            const dependencyName = mockClassData.real;
+            if (!dependencyName) return;
 
-  //   const dependencyName = concreteType.real.name;
+            const dependencyData = ClassRegistry.get(dependencyName);
+            if (!dependencyData) return;
 
-  //   if (!ClassRegistry.has(dependencyName)) {
-  //     throw new Error(`Dependency ${dependencyName} not found for class ${className}`);
-  //   }
+            dependency = dependencyData.class;
+        } else {
+            dependency = constructor;
+        }
 
-  //   return getInstance(dependencyName);
-  // }).filter(x => x);
+        return getInstance(dependency as Function);
+    }).filter(Boolean); // Fix: Better filtering
 
-  // console.log("dependencies", dependencies);
-
-  // return new (ClassConstructor as any)(...dependencies);
-};
+    console.log("dependencies", dependencies);
+    return new (ClassConstructor as any)(...dependencies);
+}
   

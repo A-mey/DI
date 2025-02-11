@@ -1,7 +1,8 @@
 import { ClassRegistry } from "../registry/class.registry";
 import { mockRealInterface, TypeMap } from "../registry/typeMap.registry";
 
-export const Interface = (interfaceName: any) => {
+export const Interface = (interfaceName: symbol) => {
+	console.log("type", typeof interfaceName);
 	return function (actualClass: Function): void {
 		if (!interfaceName || !actualClass) {
 			throw new Error("Both abstractType and concreteType must be provided.");

@@ -1,3 +1,3 @@
 export type mockRealInterface = { real: string | null, mock: string | null }
 
-export const TypeMap = new Map<string, mockRealInterface>();
+export const TypeMap = new Map<symbol, mockRealInterface>();
