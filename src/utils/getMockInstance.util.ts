@@ -36,7 +36,7 @@ export const getMockInstance = <T extends new (...args: any[]) => any> (actualCl
             dependency = constructor;
         }
 
-        return getMockInstance(dependency as any);
+        return getMockInstance(dependency as T);
     }).filter(Boolean);
 
     console.log("dependencies", dependencies);
