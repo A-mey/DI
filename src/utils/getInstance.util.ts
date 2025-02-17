@@ -37,7 +37,7 @@ export const getInstance = <T extends new (...args: any[]) => any> (actualClass:
             dependency = constructor;
         }
 
-        return getInstance(dependency as any);
+        return getInstance(dependency as T);
     }).filter(Boolean);
 
     console.log("dependencies", dependencies);
