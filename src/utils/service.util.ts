@@ -1,5 +1,4 @@
 import { classParams, ClassRegistry } from "../registry/class.registry";
-import { TypeMap } from "../registry/typeMap.registry";
 
 export const service = (classType?: "mock") => {
 	return function (target: Function): void {

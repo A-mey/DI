@@ -6,6 +6,7 @@ import { Inject } from "../utils/inject.util";
 import { getMockInstance } from "../utils/getMockInstance.util";
 import { Interface } from "../utils/interface.util";
 import { getInstance } from "../utils/getInstance.util";
+import { controller } from '../utils/controller.util';
 
 
 describe('Register classes', () => {
@@ -82,6 +83,20 @@ describe('Register classes', () => {
         }
     }
 
+    @Inject([E])
+    @controller()
+    class BController {
+        private e: E
+
+        constructor(e: E) {
+            this.e = e;
+        }
+        
+        getControllerData = () => {
+            return this.e.getPQR();
+        }
+    }
+
     it ('should add and retrive mock classes', () => {
         const y = getMockInstance(E);
         const data2 = y.getXYZ();
@@ -94,5 +109,12 @@ describe('Register classes', () => {
         const data2 = y.getXYZ();
         console.log("data2", data2);
         assert.strictEqual(data2, "1234")
+    })
+
+    it ('should add and retrieve controller', () => {
+        const z = getInstance(BController);
+        const data3 = z.getControllerData();
+        console.log("data3", data3);
+        assert.strictEqual(data3, "PQR")
     })
 })
